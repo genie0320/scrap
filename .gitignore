@@ -1,4 +1,12 @@
+### Custom ###
 .env
-myenv/
-temp/
+genv/
 .vscode/
+openai-env/
+.streamlit/
+*.txt
+# *.ipynb
+_*/*
+_*.*
+.*/*
+.*.*
