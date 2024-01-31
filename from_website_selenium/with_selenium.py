@@ -42,3 +42,7 @@ models = response.find_element(by=By.ID, value="models")
 # models = bs4(response.text, 'html.parser', parse_only=strainer("div", id = 'models'))
 for model in models.find_elements(By.TAG_NAME, value="h4"):
     print(model.text.strip())
+
+response.close()
+
+response.quit()
