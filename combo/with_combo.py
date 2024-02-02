@@ -12,15 +12,22 @@ from selenium.webdriver.common.by import By
 from icecream import ic
 
 # get list of tinyllama versions from huggingface.
-url = "https://python.langchain.com/docs/get_started/introduction"
+URL = "https://python.langchain.com/docs/get_started/introduction"
 
-# 일단 requests 로 간보기
-response = requests.get(url)
-if response.status_code == 200:
-    print("Activate Requests **************************")
-    soup = bs4(response.text, "html.parser")
-    title = soup.title.text
-else:
+
+# 일단 requests 로 간보고 안되면 selenium으로 진행.
+def get_page(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        print("Activate Requests **************************")
+        soup = bs4(response.text, "html.parser")
+        title = soup.title.text
+        return ["req", title, soup]
+    else:
+        with_selenium(url)
+
+
+def with_selenium(url):
     print("Activate Selenium **************************")
     # Set options
     options = webdriver.ChromeOptions()
@@ -34,11 +41,15 @@ else:
     service = ChromeService(ChromeDriverManager().install())
 
     # Start browser
-    response = webdriver.Chrome(service=service, options=options)
-    response.get(url)
-    title = response.title
+    drivers = webdriver.Chrome(service=service, options=options)
+    drivers.get(url)
 
-ic(title)
+    title = drivers.title
+
+    return ["sel", title, drivers.get(url)]
+
+
+ic(get_page(URL)[0:2])
 
 # buttons = response.find_elements(By.CSS_SELECTOR, value='#models button')
 
